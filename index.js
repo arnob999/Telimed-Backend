@@ -242,8 +242,22 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const booking = await bookingCollection.findOne(query);
+
             res.send(booking)
         })
+
+        app.put('/quantity/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const option = { upsert: true }
+            const updateQuantity = { $inc: { quan: -1 } };
+
+            const result = await productsCollection.updateOne(filter, updateQuantity, option);
+
+            res.send(result);
+        })
+
+
 
     } finally {
 
