@@ -259,6 +259,36 @@ async function run() {
 
 
 
+        app.get('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const product = await productsCollection.findOne(query)
+            res.send(product);
+        })
+
+        //updating of product 
+        app.put('/product/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const option = { upsert: true };
+            const product = req.body;
+            const updatedProduct = {
+                $set: {
+                    name: product.name,
+                    img: product.img,
+                    desc: product.desc,
+                    quan: product.quan,
+                    price: product.price,
+                }
+            }
+            const result = await productsCollection.updateOne(query, updatedProduct, option);
+
+            res.send(result);
+        })
+
+
+
+
     } finally {
 
     }
